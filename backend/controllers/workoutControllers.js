@@ -34,6 +34,15 @@ const getWorkout = async(req, res) => {
 const createWorkout = async(req, res) => {
     const {title, reps, load} = req.body
 
+    let emptyFields = []
+
+    if(!title) {emptyFields.push('title')}
+    if(!reps) {emptyFields.push('reps')}
+    if(!load) {emptyFields.push('load')}
+
+    //if any fields were empty no point in bothering moving on to the try-catch
+    if(emptyFields.length > 0) { return res.status(400).json({error: "Please fill in on all fields!", emptyFields})}
+
     //need a try catch in case body values are wrong or missing
     try {
         const workout = await Workout.create({title, reps, load})
