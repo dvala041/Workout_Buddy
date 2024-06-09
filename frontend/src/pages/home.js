@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useWorkoutsContext } from "../hooks/useWorkoutContext"
+import { useAuthContext } from '../hooks/useAuthContext'
 
 //components
 import WorkoutDetails from '../components/WorkoutDetails'
@@ -8,10 +9,15 @@ import WorkoutForm from '../components/WorkoutForm'
 const Home = () => {
     //const [workouts, setWorkouts] = useState(null) //replaced with reducer
     const {workouts, dispatch} = useWorkoutsContext()
+    const {user} = useAuthContext() //returns {user: someValue} where someValue is an object with email and token properties
 
     useEffect(() => {
         const fetchWorkouts = async () => {
-            const response = await fetch('/api/workouts')
+            const response = await fetch('/api/workouts', {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            })
             const json = await response.json() //array of workout objects 
 
             if(response.ok) {
@@ -22,8 +28,10 @@ const Home = () => {
             }
         }
 
-        fetchWorkouts()
-    }, [dispatch]) //[] means this use effect will only fire once; when the component renders
+        if(user) { //only fetch workouts if a user is logged in
+            fetchWorkouts()
+        }
+    }, [dispatch, user]) 
 
 
     return (

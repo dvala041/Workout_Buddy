@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const workoutRoutes = require('./routes/workouts')
+const userRoutes = require('./routes/user')
 const mongoose = require('mongoose')
 
 const app = express() // express app stores in app constant
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 
 //routes
 app.use('/api/workouts', workoutRoutes)
+app.use('/api/user', userRoutes)
 
 //error handling middleware
 // app.use((err, req, res, next) => {

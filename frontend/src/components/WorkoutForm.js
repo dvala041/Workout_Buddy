@@ -1,18 +1,27 @@
 import { useState } from "react"
 import { useWorkoutsContext } from "../hooks/useWorkoutContext"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 
 const WorkoutForm = () => {
     const { dispatch } = useWorkoutsContext()
+    const { user } = useAuthContext()
     const [title, setTitle] = useState("")
     const [load, setLoad] = useState("")
     const [reps, setReps] = useState("")
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
 
+
     //Async cuz we're reaching out to API
     const handleSubmit = async (e) => {
         e.preventDefault() //prevents form from being submitted when we refresh the page
+
+        //don't even try to make a post request if we aren't logged in
+        if(!user) {
+            setError("You must be logged in")
+            return
+        }
 
         const workout = {title, load, reps} //set workout equal to an object with these fields
 
@@ -21,7 +30,8 @@ const WorkoutForm = () => {
             method: 'POST',
             body: JSON.stringify(workout),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
         })
         
