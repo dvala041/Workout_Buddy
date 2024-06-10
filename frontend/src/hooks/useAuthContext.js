@@ -8,5 +8,6 @@ export const useAuthContext = () => {
     if(!context) {
         throw Error("useWorkoutContext must be used inside an AuthContextProvider")
     }
+    console.log("context: ", context)
     return context //returns {state, dispatch}
 }
