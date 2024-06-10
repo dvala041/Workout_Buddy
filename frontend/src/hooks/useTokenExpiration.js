@@ -28,7 +28,7 @@ export const useTokenExpiration = () => {
         //check if token is expired periodically
         const intervalId = setInterval(() => {
             checkTokenExpiration()
-        }, 300000) //checks token every 5 minutes
+        }, 30 * 60000) //checks token every 30 minutes
 
 
         //at the end of a useEffect you must clean up to avoid memory leakage
